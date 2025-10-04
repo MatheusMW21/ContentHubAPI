@@ -1,5 +1,6 @@
 using ContentHub.Data;
 using ContentHub.Models;
+using ContentHub.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace ContentHub.Controllers;
 public class LinksController : ControllerBase 
 {
   private readonly ApiDbContext _context;
+  private readonly IWebScrapingService _scrapingService;
 
-  public LinksController(ApiDbContext context)
+  public LinksController(ApiDbContext context, IWebScrapingService scrapingService)
   {
     _context = context;
+    _scrapingService = scrapingService;
   }
 
   [HttpGet]
@@ -26,10 +29,17 @@ public class LinksController : ControllerBase
   [HttpPost]
   public async Task<IActionResult> AddLink([FromBody] CreateLinkDto newLink)
   {
+    var title = newLink.Title;
+    
+    if (string.IsNullOrWhiteSpace(title)) 
+    {
+      title = await _scrapingService.GetPageTitleAsync(newLink.Url);
+    }
+
     var link = new SavedLink
     {
       Url = newLink.Url,
-      Title = newLink.Title,
+      Title = title,
       Description = newLink.Description
     };
 
