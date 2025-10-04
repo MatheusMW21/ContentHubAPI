@@ -1,0 +1,22 @@
+# Arquivos de configuração de IDEs e do sistema
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln.docstates
+
+# Arquivos gerados pelo build do .NET
+obj/
+bin/
+
+# Arquivos de banco de dados locais
+*.db
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# Segredos de usuário
+secrets.json
+user-secrets/
