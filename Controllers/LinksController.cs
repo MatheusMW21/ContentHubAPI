@@ -1,6 +1,7 @@
 using ContentHub.Data;
 using ContentHub.Models;
 using ContentHub.Services;
+using ContentHub.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,10 +21,30 @@ public class LinksController : ControllerBase
   }
 
   [HttpGet]
-  public async Task<IActionResult> GetAllLinks()
+  public async Task<IActionResult> GetAllLinks([FromQuery] string? tagName)
   {
-    var links = await _context.Links.OrderByDescending(l => l.AddedOn).ToListAsync();
-    return Ok(links);
+    IQueryable<SavedLink> query = _context.Links.Include(l => l.Tags);
+
+    if(!string.IsNullOrWhiteSpace(tagName))
+    {
+      var lowerCaseTagName = tagName.ToLower();
+      query = query.Where(l => l.Tags.Any(t => t.Name.ToLower() == lowerCaseTagName));
+    }
+
+    var links = await query.OrderByDescending(l => l.AddedOn).ToListAsync();
+
+    var linksDto = links.Select(link => new LinkDto(
+        link.Id,
+        link.Url,
+        link.Title,
+        link.Description,
+        link.AddedOn,
+        link.IsRead,
+        link.Tags.Select(tag => new TagDto(tag.Id, tag.Name)).ToList()
+
+    )).ToList();
+
+    return Ok(linksDto);
   }
 
   [HttpPost]
@@ -49,6 +70,37 @@ public class LinksController : ControllerBase
     return CreatedAtAction(nameof(GetAllLinks), new { id = link.Id }, link);
   }
 
+  [HttpPost("{linkId}/tags")]
+  public async Task<IActionResult> AddTagToLink(int linkId, [FromBody] AddTagDto addTagDto)
+  {
+    var link = await _context.Links
+      .Include(l => l.Tags)
+      .FirstOrDefaultAsync(l => l.Id == linkId);
+
+    if(link is null) 
+    {
+      return NotFound("Link não encontrado.");
+    }
+
+    var tagName = addTagDto.TagName.Trim().ToLower();
+    var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == tagName);
+
+    if (tag is null) 
+    {
+      tag = new Tag { Name = tagName };
+      _context.Tags.Add(tag);
+    }
+    // Associa a tag ao link, se ele ainda não tiver
+    if(!link.Tags.Any(t => t.Name == tagName))
+    {
+      link.Tags.Add(tag);
+      await _context.SaveChangesAsync();
+    }
+
+    return Ok(MapToLinkDto(link));
+  } 
+
+
   [HttpPut("{id}/mark-as-read")]
   public async Task<IActionResult> MarkAsRead(int id)
   {
@@ -72,6 +124,19 @@ public class LinksController : ControllerBase
     _context.Links.Remove(link);
     await _context.SaveChangesAsync();
 
-    return Ok(link);
+    return Ok(MapToLinkDto(link));
+  }
+
+  private LinkDto MapToLinkDto(SavedLink link)
+  {
+    return new LinkDto(
+      link.Id,
+      link.Url,
+      link.Title,
+      link.Description,
+      link.AddedOn,
+      link.IsRead,
+      link.Tags.Select(tag => new TagDto(tag.Id, tag.Name)).ToList()
+    );
   }
 }

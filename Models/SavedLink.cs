@@ -8,4 +8,5 @@ public class SavedLink
   public string? Description { get; set; }
   public DateTime AddedOn { get; set; } = DateTime.UtcNow;
   public bool IsRead { get; set; }
+  public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 }

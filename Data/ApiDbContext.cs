@@ -10,4 +10,5 @@ public class ApiDbContext : DbContext
   }
 
   public DbSet<SavedLink> Links { get; set; }
+  public DbSet<Tag> Tags { get; set; }
 }

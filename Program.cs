@@ -31,4 +31,4 @@ app.MapControllers();
 
 app.Run();
 
-public record CreateLinkDto(string Url, string? Title, string? Description);
+
