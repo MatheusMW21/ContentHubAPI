@@ -17,6 +17,7 @@ bin/
 # Logs
 *.log
 
-# Segredos de usuário
-secrets.json
-user-secrets/
+contenthub.db
+appsettings.json
+ContentHub.csproj
+ContentHub.sln
