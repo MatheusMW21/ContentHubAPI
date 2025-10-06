@@ -16,7 +16,8 @@ public class LinksController : ControllerBase
 {
   private readonly ApiDbContext _context;
   private readonly IWebScrapingService _scrapingService;
-
+  private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+  
   public LinksController(ApiDbContext context, IWebScrapingService scrapingService)
   {
     _context = context;
@@ -26,7 +27,10 @@ public class LinksController : ControllerBase
   [HttpGet]
   public async Task<IActionResult> GetAllLinks([FromQuery] string? tagName)
   {
-    IQueryable<SavedLink> query = _context.Links.Include(l => l.Tags);
+
+    IQueryable<SavedLink> query = _context.Links
+      .Where(link => link.UserId == CurrentUserId)
+      .Include(l => l.Tags);
 
     if (!string.IsNullOrWhiteSpace(tagName))
     {
@@ -36,16 +40,7 @@ public class LinksController : ControllerBase
 
     var links = await query.OrderByDescending(l => l.AddedOn).ToListAsync();
 
-    var linksDto = links.Select(link => new LinkDto(
-        link.Id,
-        link.Url,
-        link.Title,
-        link.Description,
-        link.AddedOn,
-        link.IsRead,
-        link.Tags.Select(tag => new TagDto(tag.Id, tag.Name)).ToList()
-
-    )).ToList();
+    var linksDto = links.Select(MapToLinkDto).ToList();
 
     return Ok(linksDto);
   }
@@ -53,14 +48,6 @@ public class LinksController : ControllerBase
   [HttpPost]
   public async Task<IActionResult> AddLink([FromBody] CreateLinkDto newLink)
   {
-    var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (string.IsNullOrEmpty(userIdString))
-    {
-      return Unauthorized();
-    }
-
-    var userId = int.Parse(userIdString);
-
     var title = newLink.Title;
     if (string.IsNullOrWhiteSpace(title))
     {
@@ -72,18 +59,13 @@ public class LinksController : ControllerBase
       Url = newLink.Url,
       Title = title,
       Description = newLink.Description,
-      UserId = userId 
+      UserId = CurrentUserId 
     };
 
     _context.Links.Add(link);
     await _context.SaveChangesAsync(); 
 
-    var linkDto = new LinkDto(
-        link.Id, link.Url, link.Title, link.Description, link.AddedOn, link.IsRead,
-        new List<TagDto>()
-    );
-
-    return CreatedAtAction(nameof(GetAllLinks), new { id = link.Id }, linkDto);
+    return CreatedAtAction(nameof(GetAllLinks), new { id = link.Id }, MapToLinkDto(link));
   }
 
   [HttpPost("{linkId}/tags")]
@@ -91,7 +73,7 @@ public class LinksController : ControllerBase
   {
     var link = await _context.Links
       .Include(l => l.Tags)
-      .FirstOrDefaultAsync(l => l.Id == linkId);
+      .FirstOrDefaultAsync(l => l.Id == linkId && l.UserId == CurrentUserId);
 
     if (link is null)
     {
@@ -106,12 +88,13 @@ public class LinksController : ControllerBase
       tag = new Tag { Name = tagName };
       _context.Tags.Add(tag);
     }
-    // Associa a tag ao link, se ele ainda não tiver
+
     if (!link.Tags.Any(t => t.Name == tagName))
     {
       link.Tags.Add(tag);
-      await _context.SaveChangesAsync();
     }
+
+    await _context.SaveChangesAsync();
 
     return Ok(MapToLinkDto(link));
   }
@@ -120,7 +103,7 @@ public class LinksController : ControllerBase
   [HttpPut("{id}/mark-as-read")]
   public async Task<IActionResult> MarkAsRead(int id)
   {
-    var link = await _context.Links.FindAsync(id);
+    var link = await _context.Links.FirstOrDefaultAsync(l => l.Id == id && l.UserId == CurrentUserId);
 
     if (link is null) return NotFound();
 
@@ -133,7 +116,10 @@ public class LinksController : ControllerBase
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeleteLink(int id)
   {
-    var link = await _context.Links.FindAsync(id);
+
+    var link = await _context.Links
+      .Include(l => l.Tags)
+      .FirstOrDefaultAsync(l => l.Id == id && l.UserId == CurrentUserId);
 
     if (link is null) return NotFound();
 
