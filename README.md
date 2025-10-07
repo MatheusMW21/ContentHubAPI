@@ -66,6 +66,16 @@ Siga os passos abaixo para ter uma cópia do projeto rodando na sua máquina.
 6.  **Acesse a documentação Swagger** no seu navegador para testar os endpoints:
     `https://localhost:PORTA/swagger` (a porta será indicada no seu terminal, ex: 7001).
 
+---
+
+## API no ar
+
+A API está implantada no Microsoft Azure e pode ser testada através da documentação do Swagger no link abaixo:
+
+**[https://wirtzcontenthubapi.azurewebsites.net/swagger](https://wirtzcontenthubapi.azurewebsites.net/swagger)**
+
+---
+
 
 ## Autor
 
