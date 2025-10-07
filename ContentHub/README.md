@@ -66,6 +66,13 @@ Siga os passos abaixo para ter uma cópia do projeto rodando na sua máquina.
 6.  **Acesse a documentação Swagger** no seu navegador para testar os endpoints:
     `https://localhost:PORTA/swagger` (a porta será indicada no seu terminal, ex: 7001).
 
+## Testes
+
+O projeto possui uma suíte de testes automatizados para garantir a qualidade e a estabilidade do código.
+
+- **Testes de Unidade:** Utilizando xUnit e Moq para testar os serviços de forma isolada.
+- **Testes de Integração:** Utilizando `WebApplicationFactory` e uma base de dados SQLite em memória para testar o fluxo completo dos endpoints da API, incluindo a camada de autenticação e o acesso a dados.
+
 ---
 
 ## API no ar
