@@ -16,8 +16,3 @@ bin/
 
 # Logs
 *.log
-
-contenthub.db
-appsettings.json
-ContentHub.sln
-dockerfile
