@@ -19,6 +19,5 @@ bin/
 
 contenthub.db
 appsettings.json
-ContentHub.csproj
 ContentHub.sln
 dockerfile
