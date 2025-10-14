@@ -27,9 +27,10 @@ public class LinksController : ControllerBase
   [HttpGet]
   public async Task<IActionResult> GetAllLinks([FromQuery] string? tagName)
   {
+    var currentUserId = CurrentUserId;
 
     IQueryable<SavedLink> query = _context.Links
-      .Where(link => link.UserId == CurrentUserId)
+      .Where(link => link.UserId == currentUserId)
       .Include(l => l.Tags);
 
     if (!string.IsNullOrWhiteSpace(tagName))
@@ -133,7 +134,7 @@ public class LinksController : ControllerBase
   {
     return new LinkDto(
       link.Id,
-      link.Url,
+      link.Url ?? string.Empty,
       link.Title,
       link.Description,
       link.AddedOn,

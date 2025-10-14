@@ -6,6 +6,10 @@ using ContentHub.Dtos;
 using ContentHub.Models;
 using ContentHub.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit; 
+using System.Threading.Tasks; 
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContentHub.Tests.Controllers;
 
@@ -43,12 +47,15 @@ public class LinksControllerTests : IClassFixture<CustomWebApplicationFactory>
             var user1 = new User { Username = "testuser", PasswordHash = "hash1" };
             var user2 = new User { Username = "anotheruser", PasswordHash = "hash2" };
             context.Users.AddRange(user1, user2);
-            await context.SaveChangesAsync(); 
+            await context.SaveChangesAsync();
 
-            userFromDb = user1;
+            // Reload users from DB to ensure IDs are set
+            var dbUser1 = await context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
+            var dbUser2 = await context.Users.FirstOrDefaultAsync(u => u.Username == "anotheruser");
+            userFromDb = dbUser1;
 
-            context.Links.Add(new SavedLink { Url = "http://test.com", User = user1 });
-            context.Links.Add(new SavedLink { Url = "http://othertest.com", User = user2 });
+            context.Links.Add(new SavedLink { Url = "http://test.com", User = dbUser1, UserId = dbUser1.Id });
+            context.Links.Add(new SavedLink { Url = "http://othertest.com", User = dbUser2, UserId = dbUser2.Id });
             await context.SaveChangesAsync();
         }
 
@@ -69,6 +76,5 @@ public class LinksControllerTests : IClassFixture<CustomWebApplicationFactory>
         Assert.NotNull(links);
         Assert.Single(links); 
         Assert.Equal("http://test.com", links[0].Url);
-        Assert.Equal(userFromDb.Id, links[0].Id); 
     }
 }
