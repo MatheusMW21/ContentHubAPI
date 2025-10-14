@@ -49,12 +49,18 @@ public class LinksControllerTests : IClassFixture<CustomWebApplicationFactory>
             context.Users.AddRange(user1, user2);
             await context.SaveChangesAsync();
 
-            // Reload users from DB to ensure IDs are set
             var dbUser1 = await context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
             var dbUser2 = await context.Users.FirstOrDefaultAsync(u => u.Username == "anotheruser");
+
+            if (dbUser1 == null || dbUser2 == null)
+            {
+                throw new InvalidOperationException("Users was not found in the database.");
+            }
+
             userFromDb = dbUser1;
 
             context.Links.Add(new SavedLink { Url = "http://test.com", User = dbUser1, UserId = dbUser1.Id });
+
             context.Links.Add(new SavedLink { Url = "http://othertest.com", User = dbUser2, UserId = dbUser2.Id });
             await context.SaveChangesAsync();
         }
