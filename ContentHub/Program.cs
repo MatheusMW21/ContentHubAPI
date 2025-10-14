@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using ContentHub.Data;
 using ContentHub.Models;
 using ContentHub.Services;
@@ -30,8 +31,12 @@ builder.Services.AddAuthentication(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=contenthub.db";
 builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlite(connectionString));
 
-builder.Services.AddControllers();
-
+builder.Services.AddControllers()
+  .AddJsonOptions(options =>
+  {
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+  });
+  
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IWebScrapingService, WebScrapingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

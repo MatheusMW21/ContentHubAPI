@@ -6,6 +6,9 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Xunit;
+using System.Threading.Tasks;
+
 
 namespace ContentHub.Tests;
 
@@ -48,7 +51,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 ["DefaultUser:Password"] = "password123"
             });
         });
-        
+
         builder.UseEnvironment("Development");
     }
 
@@ -59,9 +62,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         await context.Database.EnsureCreatedAsync();
     }
 
-    public async Task DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
         await _connection.CloseAsync();
+        await base.DisposeAsync();
+    }
+    
+    async Task IAsyncLifetime.DisposeAsync()
+    {
+        await DisposeAsync();
     }
 
     public async Task ResetDatabaseAsync()
