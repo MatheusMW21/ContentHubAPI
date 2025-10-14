@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace ContentHub.Tests;
 
@@ -36,6 +37,18 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             });
         });
 
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Jwt:Key"] = "UMA_CHAVE_SECRETA_LONGA_O_SUFICIENTE_PARA_TESTES_COM_256_BITS",
+                ["Jwt:Issuer"] = "https://localhost",
+                ["Jwt:Audience"] = "https://localhost",
+                ["DefaultUser:Username"] = "test",
+                ["DefaultUser:Password"] = "password123"
+            });
+        });
+        
         builder.UseEnvironment("Development");
     }
 
