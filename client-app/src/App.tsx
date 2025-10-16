@@ -2,6 +2,8 @@ import React, { type JSX } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
+import Header from './components/Header';
+import './App.css';
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const token = localStorage.getItem('jwt_token');
@@ -17,9 +19,14 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 function App() {
   const token = localStorage.getItem('jwt_token');
 
+  const handleLogout = () => {
+    localStorage.removeItem('jwt_token');
+    window.location.href = '/login';
+  }
+
   return (
     <div>
-      <h1>Meu Hub de Conteúdo</h1>
+      {token && <Header onLogout={handleLogout} />}
       <Routes>
         <Route 
           path="/login" 

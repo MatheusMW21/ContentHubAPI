@@ -40,33 +40,34 @@ function Login() {
         }
     };
 
-    return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Entrar</button>
-            </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+return (
+    <div>
+      <h2>Login</h2>
+      {/* Adicione a className ao formulário */}
+      <form onSubmit={handleLogin} className="login-form">
+        <div className="form-group">
+          <label>Username:</label>
+          <input 
+            type="text" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} 
+            required 
+          />
         </div>
-    );
+        <div className="form-group">
+          <label>Password:</label>
+          <input 
+            type="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+      {error && <p style={{ color: 'var(--danger-color)' }}>{error}</p>}
+    </div>
+  );
 }
 
 export default Login;
