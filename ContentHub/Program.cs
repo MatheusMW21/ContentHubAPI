@@ -1,5 +1,5 @@
 using System.Text;
-using System.Text.Json.Serialization; 
+using System.Text.Json.Serialization;
 using ContentHub.Data;
 using ContentHub.Models;
 using ContentHub.Services;
@@ -9,6 +9,18 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var AllowSpecificOrigins = "_allowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(name: AllowSpecificOrigins,
+                    policy =>
+                    {
+                      policy.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -34,7 +46,7 @@ builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlite(connect
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+      options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 builder.Services.AddHttpClient();
@@ -90,6 +102,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
