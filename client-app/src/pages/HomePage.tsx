@@ -9,11 +9,13 @@ function HomePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const [filterTag, setFilterTag] = useState<string | null>(null);
   useEffect(() => {
     const fetchLinks = async () => {
+      setLoading(true);
+      setError('');
       try {
-        const data = await getLinks();
+        const data = await getLinks(filterTag);
         setLinks(data);
       } catch (err: any) {
         setError(err.message);
@@ -23,39 +25,56 @@ function HomePage() {
     };
 
     fetchLinks();
-  }, []);
+  }, [filterTag]);
 
   const handleLinkAdded = (newLink: LinkDto) => {
-    setLinks(prevLinks => [newLink, ...prevLinks]);
-    setIsModalOpen(false); 
+    if (!filterTag) {
+      setLinks(prevLinks => [newLink, ...prevLinks]);
+    } else {
+      setFilterTag(null);
+    }
+    setIsModalOpen(false);
   };
 
   const handleTagAddedToLink = (updatedLink: LinkDto) => {
-    setLinks(currentLinks => 
-      currentLinks.map(link => 
+    setLinks(currentLinks =>
+      currentLinks.map(link =>
         link.id === updatedLink.id ? updatedLink : link
       )
     );
   };
 
+  const handleTagClick = (tagName: string) => {
+    setFilterTag(tagName);
+  };
+
+  const handleClearFilter = () => {
+    setFilterTag(null);
+  };
+
   if (loading) return <p>A carregar links...</p>;
   if (error) return <p style={{ color: 'var(--danger-color)' }}>Erro: {error}</p>;
 
-return (
+  return (
     <div>
       <div className="page-header">
-        <h2>Links Salvos</h2>
+        <h2>{filterTag ? `Links com a tag "${filterTag}"` : 'Links Salvos'}</h2>
         <button onClick={() => setIsModalOpen(true)} className="btn-primary">
           Adicionar Novo Link
         </button>
       </div>
+      {filterTag && (
+        <button onClick={handleClearFilter} className="btn-secondary">
+          Mostrar Todos os Links
+        </button>
+      )}
 
-      {links.length === 0 ? (
-        <p>Nenhum link salvo ainda.</p>
+      {links.length === 0 && !loading ? (
+        <p>Nenhum link encontrado.</p>
       ) : (
         <ul className="links-list">
           {links.map(link => (
-            <LinkItem key={link.id} link={link} onTagAdded={handleTagAddedToLink} />
+            <LinkItem key={link.id} link={link} onTagAdded={() => { }} onTagClick={handleTagClick} />
           ))}
         </ul>
       )}

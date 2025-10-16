@@ -228,3 +228,13 @@ button.btn-primary:hover {
   border: 1px solid var(--border-color);
   color: var(--text-color-secondary);
 }
+
+.tag-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.tag-item.clickable:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}

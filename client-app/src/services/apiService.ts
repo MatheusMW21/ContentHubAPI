@@ -15,14 +15,19 @@ export interface LinkDto {
 
 const API_BASE_URL = 'https://localhost:7014/api';
 
-export const getLinks = async (): Promise<LinkDto[]> => {
+export const getLinks = async (tagName: string | null): Promise<LinkDto[]> => {
     const token = localStorage.getItem('jwt_token');
 
     if(!token) {
         throw new Error('Nenhum token de autenticação encontrado.');
     }
 
-    const response = await fetch(`${API_BASE_URL}/Links`, {
+    const url = new URL(`${API_BASE_URL}/Links`);
+    if(tagName) {
+      url.searchParams.append('tag', tagName);
+    }
+
+    const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
