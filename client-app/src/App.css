@@ -126,3 +126,105 @@ button.logout {
 .app-header .logout {
   margin-left: 1rem; 
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background-color: var(--surface-color);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1001;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+}
+
+.homepage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  margin-bottom: 0;
+}
+
+button.btn-primary {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+button.btn-primary:hover {
+  opacity: 0.9;
+  border-color: var(--primary-color);
+}
+
+.add-tag-form {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.add-tag-form input {
+  flex-grow: 1; 
+}
+
+.add-tag-button {
+  background: none;
+  border: 1px dashed var(--border-color);
+  color: var(--text-color-secondary);
+  padding: 0.4em 0.8em;
+  font-size: 0.9em;
+  margin-top: 1rem;
+}
+.add-tag-button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.add-tag-form {
+  align-items: center;
+}
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.form-actions button {
+  padding: 0.4em 0.8em;
+  font-size: 0.9em;
+}
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color-secondary);
+}

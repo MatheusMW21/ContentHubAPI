@@ -35,3 +35,59 @@ export const getLinks = async (): Promise<LinkDto[]> => {
 
     return await response.json() as LinkDto[];
 }
+
+export const addLink = async (linkData: { url: string; description?: string }): Promise<LinkDto> => {
+  const token = localStorage.getItem('jwt_token');
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Nenhum token de autenticação encontrado.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Links`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(linkData), 
+  });
+
+  if (response.status === 401) {
+    localStorage.clear();
+    window.location.href = '/login';
+    throw new Error('Sessão expirada. Por favor, faça login novamente.');
+  }
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error("Erro da API:", errorData);
+    throw new Error('Falha ao adicionar o link. Verifique a consola para mais detalhes.');
+  }
+
+  return await response.json() as LinkDto;
+};
+
+export const addTagToLink = async (linkId: number, tagName: string): Promise<LinkDto> => {
+  const token = localStorage.getItem('jwt_token');
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Nenhum token de autenticação encontrado.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Links/${linkId}/tags`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tagName }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Falha ao adicionar a tag.');
+  }
+
+  return await response.json() as LinkDto;
+};
