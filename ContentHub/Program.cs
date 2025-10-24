@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Services.AddCors(options =>
   options.AddPolicy(name: AllowSpecificOrigins,
                     policy =>
                     {
-                      policy.WithOrigins("http://localhost:5173")
+                      policy.WithOrigins("https://localhost:5173")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
@@ -42,7 +43,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=contenthub.db";
-builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlite(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

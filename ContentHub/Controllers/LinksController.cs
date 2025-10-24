@@ -25,13 +25,12 @@ public class LinksController : ControllerBase
   }
 
   [HttpGet]
-  public async Task<IActionResult> GetAllLinks([FromQuery] string? tagName)
+  public async Task<IActionResult> GetAllLinks([FromQuery(Name = "tag")] string? tagName)
   {
     var currentUserId = CurrentUserId;
 
     IQueryable<SavedLink> query = _context.Links
-      .Where(link => link.UserId == currentUserId)
-      .Include(l => l.Tags);
+      .Where(link => link.UserId == currentUserId);
 
     if (!string.IsNullOrWhiteSpace(tagName))
     {
@@ -39,7 +38,10 @@ public class LinksController : ControllerBase
       query = query.Where(l => l.Tags.Any(t => t.Name.ToLower() == lowerCaseTagName));
     }
 
-    var links = await query.OrderByDescending(l => l.AddedOn).ToListAsync();
+    var links = await query
+        .Include(l =>l.Tags)
+        .OrderByDescending(l => l.AddedOn)
+        .ToListAsync();
 
     var linksDto = links.Select(MapToLinkDto).ToList();
 
