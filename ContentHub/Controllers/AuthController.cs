@@ -21,6 +21,35 @@ namespace ContentHub.Controllers
             _tokenService = tokenService;
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        {
+            var existingUser = await _context.Users
+                .AnyAsync(u => u.Username.ToLower() == registerDto.Username.ToLower());
+
+            if (existingUser)
+            {
+                return BadRequest("Nome de usuário já está em uso.");
+            }
+
+            if (registerDto.Password != registerDto.PasswordConfirmation)
+            {
+                return BadRequest("A confirmação de senha não corresponde à senha.");
+            }
+
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
+
+            var newUser = new User
+            {
+                Username = registerDto.Username,
+                PasswordHash = passwordHash
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {

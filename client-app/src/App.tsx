@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import HomePage from './pages/HomePage';
 import Header from './components/Header';
 import './App.css';
+import Register from './pages/Register';
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const token = localStorage.getItem('jwt_token');
@@ -28,20 +29,25 @@ function App() {
     <div>
       {token && <Header onLogout={handleLogout} />}
       <Routes>
-        <Route 
-          path="/login" 
-          element={token ? <Navigate to="/" replace /> : <Login />} 
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/" replace /> : <Login />}
         />
-        
-        <Route 
-          path="/" 
+
+        <Route
+          path="/register"
+          element={token ? <Navigate to="/" replace /> : <Register />}
+        />
+
+        <Route
+          path="/"
           element={
             <ProtectedRoute>
               <HomePage />
             </ProtectedRoute>
-          } 
+          }
         />
-        
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

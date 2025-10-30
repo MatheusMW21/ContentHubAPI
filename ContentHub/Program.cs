@@ -18,7 +18,8 @@ builder.Services.AddCors(options =>
   options.AddPolicy(name: AllowSpecificOrigins,
                     policy =>
                     {
-                      policy.WithOrigins("https://localhost:5173")
+                      policy.WithOrigins("http://localhost:5173", 
+                                         "https://localhost:5173")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
@@ -50,12 +51,12 @@ builder.Services.AddControllers()
     {
       options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
       options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+      options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IWebScrapingService, WebScrapingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

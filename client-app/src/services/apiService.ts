@@ -15,6 +15,21 @@ export interface LinkDto {
 
 const API_BASE_URL = 'https://localhost:7014/api';
 
+export const registerUser = async (username: string, password: string, passwordConfirmation: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/Auth/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, passwordConfirmation }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Erro ao registrar o usuário.');
+    }
+}
+
+
 export const getLinks = async (tagName: string | null): Promise<LinkDto[]> => {
     const token = localStorage.getItem('jwt_token');
 

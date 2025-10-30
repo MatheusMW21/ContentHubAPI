@@ -1,5 +1,5 @@
 import React,  { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginResponse {
     token: string;
@@ -66,6 +66,9 @@ return (
         <button type="submit">Entrar</button>
       </form>
       {error && <p style={{ color: 'var(--danger-color)' }}>{error}</p>}
+      <p style={{ marginTop: '1rem' }}>
+        Não tem uma conta? <Link to="/register" style={{ color: 'var(--primary-color)' }}>Registe-se aqui</Link>
+      </p>
     </div>
   );
 }
