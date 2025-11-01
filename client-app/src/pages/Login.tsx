@@ -82,7 +82,7 @@ return (
       </form>
       {error && <p style={{ color: 'var(--danger-color)' }}>{error}</p>}
       <p style={{ marginTop: '1rem' }}>
-        Não tem uma conta? <Link to="/register" style={{ color: 'var(--primary-color)' }}>Registe-se aqui</Link>
+        Não tem uma conta? <Link to="/register" style={{ color: 'var(--primary-color)' }}>Registre-se aqui</Link>
       </p>
     </div>
   );

@@ -51,7 +51,6 @@ return (
           />
         </div>
 
-        {/* 3. Atualize o primeiro campo de senha */}
         <div className="form-group">
           <label>Password:</label>
           <div className="password-input-container">
@@ -69,8 +68,7 @@ return (
             </span>
           </div>
         </div>
-        
-        {/* 4. Atualize o segundo campo de senha */}
+
         <div className="form-group">
           <label>Confirmar Password:</label>
           <div className="password-input-container">
