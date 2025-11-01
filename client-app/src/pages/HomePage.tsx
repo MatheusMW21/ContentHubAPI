@@ -112,7 +112,7 @@ function HomePage() {
       )}
 
       {unreadLinks.length === 0 && !loading && !filterTag ? (
-        <p>Nenhum link por ler. Adicione um novo!</p>
+        <p>Nenhum link encontrado. Adicione um novo!</p>
       ) : (
         <ul className="links-list">
           {unreadLinks.map(link => (

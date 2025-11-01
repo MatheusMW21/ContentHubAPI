@@ -1,11 +1,10 @@
-/* Definição de variáveis de cores e fontes para o tema */
 :root {
   --font-family: 'Inter', sans-serif;
-  --background-color: #121212; /* Preto suave */
-  --surface-color: #1e1e1e;    /* Cinza escuro para cards e inputs */
-  --primary-color: #9370DB;     /* Roxo (MediumPurple) */
-  --danger-color: #E53E3E;      /* Vermelho para alertas e botões de apagar */
-  --text-color: #E0E0E0;        /* Cinza claro para texto */
+  --background-color: #121212; 
+  --surface-color: #1e1e1e;    
+  --primary-color: #9370DB;    
+  --danger-color: #E53E3E;      
+  --text-color: #E0E0E0;       
   --text-color-secondary: #a0a0a0;
   --border-color: #333;
 }
@@ -26,8 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Estilo para o container principal da aplicação */
-#root {
+.container {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;

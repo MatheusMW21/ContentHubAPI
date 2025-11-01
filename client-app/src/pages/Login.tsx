@@ -36,7 +36,7 @@ function Login() {
             const data = await response.json() as LoginResponse;
 
             localStorage.setItem('jwt_token', data.token);
-            navigate('/'); 
+            navigate('/dashboard');
             window.location.reload();
         } catch (err: any) {
             setError(err.message);
@@ -57,18 +57,15 @@ return (
           />
         </div>
 
-        {/* 3. Atualize o grupo do campo de senha */}
         <div className="form-group">
           <label>Password:</label>
-          {/* Envolvemos o input e o ícone num container */}
           <div className="password-input-container">
             <input 
-              type={showPassword ? 'text' : 'password'} // Altera o tipo dinamicamente
+              type={showPassword ? 'text' : 'password'} 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
             />
-            {/* O ícone que alterna o estado ao ser clicado */}
             <span 
               className="password-toggle-icon" 
               onClick={() => setShowPassword(!showPassword)}

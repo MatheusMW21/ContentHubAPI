@@ -30,7 +30,7 @@ export const registerUser = async (username: string, password: string, passwordC
     });
 
     if (!response.ok) {
-        throw new Error('Erro ao registrar o usuário.');
+        throw new Error('Usuário já cadastrado.');
     }
 }
 
