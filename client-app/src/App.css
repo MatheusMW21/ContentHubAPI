@@ -257,3 +257,38 @@ button.btn-primary:hover {
   color: var(--text-color-secondary);
   font-size: 1.2em; 
 }
+
+.link-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.link-item-header a {
+  flex-grow: 1; 
+}
+
+.link-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+  background-color: var(--background-color);
+}
+
+.icon-button.danger:hover {
+  color: var(--danger-color);
+}

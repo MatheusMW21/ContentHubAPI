@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { getLinks, type LinkDto } from '../services/apiService';
+import { getLinks, deleteLink, type LinkDto } from '../services/apiService';
 import AddLinkForm from '../components/AddLinkForm';
 import Modal from '../components/Modal';
 import LinkItem from '../components/LinkItem';
 
 function HomePage() {
   const [links, setLinks] = useState<LinkDto[]>([]);
+  const [filterTag, setFilterTag] = useState<string | null>(null);
+  
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [filterTag, setFilterTag] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchLinks = async () => {
       setLoading(true);
@@ -27,11 +29,12 @@ function HomePage() {
     fetchLinks();
   }, [filterTag]);
 
+
   const handleLinkAdded = (newLink: LinkDto) => {
-    if (!filterTag) {
-      setLinks(prevLinks => [newLink, ...prevLinks]);
-    } else {
+    if (filterTag) {
       setFilterTag(null);
+    } else {
+      setLinks(prevLinks => [newLink, ...prevLinks]);
     }
     setIsModalOpen(false);
   };
@@ -52,6 +55,16 @@ function HomePage() {
     setFilterTag(null);
   };
 
+  const handleLinkDeleted = async (linkId: number) => {
+    try {
+      await deleteLink(linkId);
+      setLinks(currentLinks => currentLinks.filter(link => link.id !== linkId));
+    } catch (err: any) {
+      console.error(err.message);
+      setError(err.message);
+    }
+  };
+
   if (loading) return <p>A carregar links...</p>;
   if (error) return <p style={{ color: 'var(--danger-color)' }}>Erro: {error}</p>;
 
@@ -63,8 +76,9 @@ function HomePage() {
           Adicionar Novo Link
         </button>
       </div>
+
       {filterTag && (
-        <button onClick={handleClearFilter} className="btn-secondary">
+        <button onClick={handleClearFilter} className="btn-secondary" style={{ marginBottom: '1rem' }}>
           Mostrar Todos os Links
         </button>
       )}
@@ -74,7 +88,13 @@ function HomePage() {
       ) : (
         <ul className="links-list">
           {links.map(link => (
-            <LinkItem key={link.id} link={link} onTagAdded={() => { }} onTagClick={handleTagClick} />
+            <LinkItem 
+              key={link.id} 
+              link={link} 
+              onTagAdded={handleTagAddedToLink} 
+              onTagClick={handleTagClick}
+              onLinkDeleted={handleLinkDeleted} 
+            />
           ))}
         </ul>
       )}

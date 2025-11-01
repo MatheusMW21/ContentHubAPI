@@ -111,3 +111,29 @@ export const addTagToLink = async (linkId: number, tagName: string): Promise<Lin
 
   return await response.json() as LinkDto;
 };
+
+export const deleteLink = async (linkId: number): Promise<void> => {
+  const token = localStorage.getItem('jwt_token');
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Nenhum token de autenticação encontrado.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Links/${linkId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    localStorage.clear();
+    window.location.href = '/login';
+    throw new Error('Sessão expirada. Por favor, faça login novamente.');
+  }
+
+  if (!response.ok) {
+    throw new Error('Falha ao deletar o link.');
+  }
+}
