@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
                     {
                       policy.WithOrigins("http://localhost:5173",
                                          "https://localhost:5173",
-                                         "https://content-hub-api-tau.vercel.app/")
+                                         "https://content-hub-api-tau.vercel.app")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
