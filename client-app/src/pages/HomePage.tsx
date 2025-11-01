@@ -93,11 +93,11 @@ function HomePage() {
     );
   }
 
-  if (loading) return <p>A carregar links...</p>;
-  if (error) return <p style={{ color: 'var(--danger-color)' }}>Erro: {error}</p>;
+  if (loading) return <div className="container"><p>A carregar links...</p></div>;
+  if (error) return <div className="container"><p style={{ color: 'red' }}>Erro: {error}</p></div>;
 
   return (
-    <div>
+    <div className="container">
       <div className="page-header">
         <h2>{filterTag ? `Links com a tag "${filterTag}"` : 'Links Salvos'}</h2>
         <button onClick={() => setIsModalOpen(true)} className="btn-primary">

@@ -29,7 +29,7 @@ function App() {
     <div>
       <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
-      <div className="container">
+      <div>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <Login />} />

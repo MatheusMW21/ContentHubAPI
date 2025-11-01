@@ -38,7 +38,7 @@ function Register() {
   };
 
 return (
-    <div>
+    <div className="container">
       <h2>Registar Nova Conta</h2>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">

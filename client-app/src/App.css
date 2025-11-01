@@ -352,8 +352,10 @@ button.logout {
 }
 
 .landing-page {
-  text-align: center;
+  text-align: left;
   padding: 4rem 1rem;
+  max-width: 1100px;
+  margin: 0 auto; 
 }
 
 .landing-page h2 {
@@ -402,4 +404,79 @@ button.logout {
 .theme-toggle-button:hover {
   border-color: var(--primary-color);
   color: var(--primary-color);
+}
+
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  align-items: center;
+  gap: 3rem; 
+}
+
+.hero-text h2 {
+  font-size: 3em;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.hero-text p {
+  font-size: 1.2em;
+  color: var(--text-color-secondary);
+  max-width: 600px;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.hero-text .btn-primary {
+  font-size: 1.2em;
+  padding: 0.8em 1.5em;
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.features-section {
+  text-align: center;
+  margin-top: 6rem; /* Espaço depois do Hero */
+  border-top: 1px solid var(--border-color);
+  padding-top: 4rem;
+}
+
+.features-section h3 {
+  font-size: 2em;
+  color: var(--text-color);
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+  gap: 2rem;
+}
+
+.feature-card {
+  background-color: var(--surface-color);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.feature-card-icon {
+  font-size: 2.5em;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.feature-card h4 {
+  font-size: 1.2em;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: var(--text-color-secondary);
 }
