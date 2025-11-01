@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle'; 
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -12,8 +13,9 @@ function Header({ isLoggedIn, onLogout }: HeaderProps) {
       <Link to={isLoggedIn ? "/dashboard" : "/"} className="app-title-link">
         <h1 className="app-title">ContentHub</h1>
       </Link>
-      
       <nav className="main-nav">
+        <ThemeToggle />
+
         {isLoggedIn ? (
           <button onClick={onLogout} className="logout">Sair</button>
         ) : (

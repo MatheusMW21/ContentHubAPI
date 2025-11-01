@@ -386,3 +386,20 @@ button.logout {
   margin-right: 0.75rem;
   color: var(--primary-color);
 }
+
+.theme-toggle-button {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+.theme-toggle-button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}

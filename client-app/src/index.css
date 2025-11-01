@@ -1,15 +1,27 @@
 :root {
   --font-family: 'Inter', sans-serif;
-  --background-color: #121212; 
-  --surface-color: #1e1e1e;    
+  --background-color: #f4f4f5; 
+  --surface-color: #ffffff;   
   --primary-color: #9370DB;    
   --danger-color: #E53E3E;      
-  --text-color: #E0E0E0;       
-  --text-color-secondary: #a0a0a0;
-  --border-color: #333;
+  --text-color: #18181b;       
+  --text-color-secondary: #52525b; 
+  --border-color: #e4e4e7;
+  
+  color-scheme: light;
 }
 
-/* Reset e Estilos Globais */
+[data-theme='dark'] {
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --primary-color: #9370DB;
+  --danger-color: #E53E3E;
+  --text-color: #E0E0E0;
+  --text-color-secondary: #a0a0a0;
+  --border-color: #333;
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
