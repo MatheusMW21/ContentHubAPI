@@ -1,4 +1,5 @@
 import React,  { useState } from 'react';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginResponse {
@@ -9,6 +10,8 @@ function Login() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,7 +46,6 @@ function Login() {
 return (
     <div>
       <h2>Login</h2>
-      {/* Adicione a className ao formulário */}
       <form onSubmit={handleLogin} className="login-form">
         <div className="form-group">
           <label>Username:</label>
@@ -54,15 +56,28 @@ return (
             required 
           />
         </div>
+
+        {/* 3. Atualize o grupo do campo de senha */}
         <div className="form-group">
           <label>Password:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
+          {/* Envolvemos o input e o ícone num container */}
+          <div className="password-input-container">
+            <input 
+              type={showPassword ? 'text' : 'password'} // Altera o tipo dinamicamente
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            {/* O ícone que alterna o estado ao ser clicado */}
+            <span 
+              className="password-toggle-icon" 
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </span>
+          </div>
         </div>
+
         <button type="submit">Entrar</button>
       </form>
       {error && <p style={{ color: 'var(--danger-color)' }}>{error}</p>}

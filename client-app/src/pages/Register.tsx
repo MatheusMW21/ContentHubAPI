@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../services/apiService';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 function Register() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
-  
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +37,7 @@ function Register() {
     }
   };
 
-  return (
+return (
     <div>
       <h2>Registar Nova Conta</h2>
       <form onSubmit={handleSubmit} className="login-form">
@@ -47,23 +50,43 @@ function Register() {
             required 
           />
         </div>
+
+        {/* 3. Atualize o primeiro campo de senha */}
         <div className="form-group">
           <label>Password:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
+          <div className="password-input-container">
+            <input 
+              type={showPassword ? 'text' : 'password'} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <span 
+              className="password-toggle-icon" 
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </span>
+          </div>
         </div>
+        
+        {/* 4. Atualize o segundo campo de senha */}
         <div className="form-group">
           <label>Confirmar Password:</label>
-          <input 
-            type="password" 
-            value={passwordConfirmation} 
-            onChange={(e) => setPasswordConfirmation(e.target.value)} 
-            required 
-          />
+          <div className="password-input-container">
+            <input 
+              type={showConfirmPassword ? 'text' : 'password'}
+              value={passwordConfirmation} 
+              onChange={(e) => setPasswordConfirmation(e.target.value)} 
+              required 
+            />
+            <span 
+              className="password-toggle-icon" 
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </span>
+          </div>
         </div>
         
         <button type="submit">Registar</button>
@@ -77,5 +100,4 @@ function Register() {
     </div>
   );
 }
-
 export default Register;

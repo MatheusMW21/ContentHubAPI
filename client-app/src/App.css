@@ -238,3 +238,22 @@ button.btn-primary:hover {
   color: #ffffff;
   border-color: var(--primary-color);
 }
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container input {
+  width: 100%;
+}
+
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%); 
+  cursor: pointer;
+  color: var(--text-color-secondary);
+  font-size: 1.2em; 
+}
