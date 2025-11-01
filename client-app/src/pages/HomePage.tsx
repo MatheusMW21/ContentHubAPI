@@ -85,6 +85,14 @@ function HomePage() {
     return links.filter(link => link.isRead);
   }, [links]);
 
+  const handleLinkUpdated = (updatedLink: LinkDto) => {
+    setLinks(currentLinks =>
+      currentLinks.map(link =>
+        link.id === updatedLink.id ? updatedLink : link
+      )
+    );
+  }
+
   if (loading) return <p>A carregar links...</p>;
   if (error) return <p style={{ color: 'var(--danger-color)' }}>Erro: {error}</p>;
 
@@ -115,6 +123,7 @@ function HomePage() {
               onTagClick={handleTagClick}
               onLinkDeleted={handleLinkDeleted}
               onToggleRead={handleToggleRead} 
+              onLinkUpdated={handleLinkUpdated}
             />
           ))}
         </ul>
@@ -134,6 +143,7 @@ function HomePage() {
                 onTagClick={handleTagClick}
                 onLinkDeleted={handleLinkDeleted}
                 onToggleRead={handleToggleRead} 
+                onLinkUpdated={handleLinkUpdated}
               />
             ))}
           </ul>

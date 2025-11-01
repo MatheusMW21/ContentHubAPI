@@ -13,6 +13,11 @@ export interface LinkDto {
     tags: TagDto[];
 }
 
+export interface UpdateLinkData {
+    title: string | null;
+    description: string | null;
+}
+
 const API_BASE_URL = 'https://localhost:7014/api';
 
 export const registerUser = async (username: string, password: string, passwordConfirmation: string): Promise<void> => {
@@ -161,6 +166,30 @@ export const toggleReadStatus = async (linkId: number): Promise<LinkDto> => {
 
   if (!response.ok) {
     throw new Error('Falha ao atualizar o status de leitura.');
+  }
+
+  return await response.json() as LinkDto;
+};
+
+export const updateLink = async (linkId: number, updateData: UpdateLinkData): Promise<LinkDto> => {
+  const token = localStorage.getItem('jwt_token');
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Nenhum token de autenticação encontrado.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Links/${linkId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updateData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Falha ao atualizar o link.');
   }
 
   return await response.json() as LinkDto;

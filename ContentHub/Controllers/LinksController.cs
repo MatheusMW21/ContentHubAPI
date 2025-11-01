@@ -103,7 +103,7 @@ public class LinksController : ControllerBase
   }
 
 
-  [HttpPut("{id}/toggle-read")] 
+  [HttpPut("{id}/toggle-read")]
   public async Task<IActionResult> ToggleReadStatus(int id)
   {
     var link = await _context.Links
@@ -113,6 +113,30 @@ public class LinksController : ControllerBase
     if (link is null) return NotFound();
 
     link.IsRead = !link.IsRead;
+    await _context.SaveChangesAsync();
+
+    return Ok(MapToLinkDto(link));
+  }
+
+  [HttpPut("{id}")]
+  public async Task<IActionResult> UpdateLink(int id, [FromBody] UpdateLinkDto updateLinkDto)
+  {
+    var link = await _context.Links
+      .Include(l => l.Tags)
+      .FirstOrDefaultAsync(l => l.Id == id && l.UserId == CurrentUserId);
+
+    if (link is null) return NotFound();
+
+    if (!string.IsNullOrWhiteSpace(updateLinkDto.Title))
+    {
+      link.Title = updateLinkDto.Title;
+    }
+
+    if (!string.IsNullOrWhiteSpace(updateLinkDto.Description))
+    {
+      link.Description = updateLinkDto.Description;
+    }
+
     await _context.SaveChangesAsync();
 
     return Ok(MapToLinkDto(link));
