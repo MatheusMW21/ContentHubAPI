@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import type { LinkDto } from '../services/apiService';
 import AddTagForm from './AddTagForm';
-import { FaTrash } from 'react-icons/fa'; 
+import { FaTrash, FaCheck } from 'react-icons/fa'; 
 
 interface LinkItemProps {
   link: LinkDto;
   onTagAdded: (updatedLink: LinkDto) => void;
   onTagClick: (tagName: string) => void;
-  onLinkDeleted: (linkId: number) => void; 
+  onLinkDeleted: (linkId: number) => void;
+  onToggleRead: (linkId: number) => void; 
 }
 
-function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted }: LinkItemProps) {
+function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted, onToggleRead }: LinkItemProps) {
   const [isAddingTag, setIsAddingTag] = useState(false);
 
   const handleTagAdded = (updatedLink: LinkDto) => {
     onTagAdded(updatedLink); 
-    setIsAddingTag(false); 
+    setIsAddingTag(false);  
   };
 
   const handleDeleteClick = () => {
@@ -25,18 +26,22 @@ function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted }: LinkItemProps
   };
 
   return (
-    <li className="link-item">
+    <li className={`link-item ${link.isRead ? 'is-read' : ''}`}>
       <div className="link-item-header">
         <a href={link.url} target="_blank" rel="noopener noreferrer">
           {link.title || link.url}
         </a>
         
         <div className="link-actions">
+          <button onClick={() => onToggleRead(link.id)} className="icon-button primary">
+            <FaCheck />
+          </button>
           <button onClick={handleDeleteClick} className="icon-button danger">
             <FaTrash />
           </button>
         </div>
       </div>
+
       <div className="tags-container">
         {link.tags.map(tag => (
           <span 
@@ -48,6 +53,7 @@ function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted }: LinkItemProps
           </span>
         ))}
       </div>
+
       <div className="add-tag-section">
         {isAddingTag ? (
           <AddTagForm 

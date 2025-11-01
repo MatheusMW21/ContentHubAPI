@@ -17,7 +17,7 @@ public class LinksController : ControllerBase
   private readonly ApiDbContext _context;
   private readonly IWebScrapingService _scrapingService;
   private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-  
+
   public LinksController(ApiDbContext context, IWebScrapingService scrapingService)
   {
     _context = context;
@@ -39,7 +39,7 @@ public class LinksController : ControllerBase
     }
 
     var links = await query
-        .Include(l =>l.Tags)
+        .Include(l => l.Tags)
         .OrderByDescending(l => l.AddedOn)
         .ToListAsync();
 
@@ -62,11 +62,11 @@ public class LinksController : ControllerBase
       Url = newLink.Url,
       Title = title,
       Description = newLink.Description,
-      UserId = CurrentUserId 
+      UserId = CurrentUserId
     };
 
     _context.Links.Add(link);
-    await _context.SaveChangesAsync(); 
+    await _context.SaveChangesAsync();
 
     return CreatedAtAction(nameof(GetAllLinks), new { id = link.Id }, MapToLinkDto(link));
   }
@@ -103,17 +103,19 @@ public class LinksController : ControllerBase
   }
 
 
-  [HttpPut("{id}/mark-as-read")]
-  public async Task<IActionResult> MarkAsRead(int id)
+  [HttpPut("{id}/toggle-read")] 
+  public async Task<IActionResult> ToggleReadStatus(int id)
   {
-    var link = await _context.Links.FirstOrDefaultAsync(l => l.Id == id && l.UserId == CurrentUserId);
+    var link = await _context.Links
+        .Include(l => l.Tags)
+        .FirstOrDefaultAsync(l => l.Id == id && l.UserId == CurrentUserId);
 
     if (link is null) return NotFound();
 
-    link.IsRead = true;
+    link.IsRead = !link.IsRead;
     await _context.SaveChangesAsync();
 
-    return NoContent();
+    return Ok(MapToLinkDto(link));
   }
 
   [HttpDelete("{id}")]

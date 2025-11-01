@@ -292,3 +292,15 @@ button.btn-primary:hover {
 .icon-button.danger:hover {
   color: var(--danger-color);
 }
+
+.link-item.is-read {
+  opacity: 0.6; 
+}
+
+.link-item.is-read a {
+  color: var(--text-color-secondary);
+}
+
+.icon-button.primary:hover {
+  color: var(--primary-color);
+}
