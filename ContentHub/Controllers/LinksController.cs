@@ -127,15 +127,8 @@ public class LinksController : ControllerBase
 
     if (link is null) return NotFound();
 
-    if (!string.IsNullOrWhiteSpace(updateLinkDto.Title))
-    {
-      link.Title = updateLinkDto.Title;
-    }
-
-    if (!string.IsNullOrWhiteSpace(updateLinkDto.Description))
-    {
-      link.Description = updateLinkDto.Description;
-    }
+    link.Title = updateLinkDto.Title;
+    link.Description = updateLinkDto.Description;
 
     await _context.SaveChangesAsync();
 
