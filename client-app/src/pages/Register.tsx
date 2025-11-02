@@ -24,6 +24,22 @@ function Register() {
       return;
     }
 
+    if (username.length < 3) {
+      setError("O nome de usuário deve ter pelo menos 3 caracteres.");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("A senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
+
+    const hasSpaces = /\s/.test(username);
+    if (hasSpaces) {
+      setError("O nome de utilizador não pode conter espaços.");
+      return;
+    }
+
     try {
       await registerUser(username, password, passwordConfirmation);
       setSuccess('Registo bem-sucedido! A redirecionar para o login...');
@@ -52,7 +68,7 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Password:</label>
+          <label>Senha:</label>
           <div className="password-input-container">
             <input 
               type={showPassword ? 'text' : 'password'} 
@@ -70,7 +86,7 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Confirmar Password:</label>
+          <label>Confirmar Senha:</label>
           <div className="password-input-container">
             <input 
               type={showConfirmPassword ? 'text' : 'password'}

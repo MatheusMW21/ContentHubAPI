@@ -24,6 +24,16 @@ namespace ContentHub.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
+            if (string.IsNullOrWhiteSpace(registerDto.Username) || string.IsNullOrWhiteSpace(registerDto.Password))
+            {
+                return BadRequest("Nome de usuário e senha são obrigatórios.");
+            }
+
+            if (registerDto.Username.Contains(" "))
+            {
+                return BadRequest("Nome de usuário não pode conter espaços.");
+            }
+            
             var existingUser = await _context.Users
                 .AnyAsync(u => u.Username.ToLower() == registerDto.Username.ToLower());
 

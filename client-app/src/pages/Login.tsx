@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { loginUser } from '../services/apiService';
 
@@ -8,7 +8,6 @@ function Login() {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,7 +17,7 @@ function Login() {
       const data = await loginUser({ username, password });
       
       localStorage.setItem('jwt_token', data.token);
-      navigate('/dashboard'); 
+      window.location.href = '/dashboard';
 
     } catch (err: any) {
       setError(err.message);
@@ -26,7 +25,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Login</h2>
       <form onSubmit={handleLogin} className="login-form">
         <div className="form-group">
@@ -40,7 +39,7 @@ function Login() {
         </div>
 
         <div className="form-group">
-          <label>Password:</label>
+          <label>Senha:</label>
           <div className="password-input-container">
             <input 
               type={showPassword ? 'text' : 'password'}
