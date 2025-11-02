@@ -36,7 +36,7 @@ function LandingPage() {
           <div className="feature-card">
             <div className="feature-card-icon"><FaMagic /></div>
             <h4>Títulos Automáticos</h4>
-            <p>Basta colar a URL e nós tratamos de extrair o título automaticamente via web scraping.</p>
+            <p>Basta colar a URL e nós tratamos de extrair o título automaticamente.</p>
           </div>
 
           <div className="feature-card">

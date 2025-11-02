@@ -18,6 +18,15 @@ export interface UpdateLinkData {
     description: string | null;
 }
 
+export interface LoginData {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const registerUser = async (username: string, password: string, passwordConfirmation: string): Promise<void> => {
@@ -193,4 +202,20 @@ export const updateLink = async (linkId: number, updateData: UpdateLinkData): Pr
   }
 
   return await response.json() as LinkDto;
+};
+
+export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
+  const response = await fetch(`${API_BASE_URL}/Auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error('Credenciais inválidas. Tente novamente.');
+  }
+
+  return await response.json() as LoginResponse;
 };
