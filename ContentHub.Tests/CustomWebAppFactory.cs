@@ -1,25 +1,24 @@
-using System.Data.Common;
 using ContentHub.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 using System.Threading.Tasks;
 
+// Remova as referências do SQLite
+// using System.Data.Common;
+// using Microsoft.Data.Sqlite;
 
 namespace ContentHub.Tests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly SqliteConnection _connection;
+    private readonly string _testConnectionString = "Host=localhost;Database=contenthub_test_db;Username=contenthub_user;Password=uma_senha_forte_aqui";
 
     public CustomWebApplicationFactory()
     {
-        _connection = new SqliteConnection("DataSource=:memory:");
-        _connection.Open();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -36,7 +35,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
             services.AddDbContext<ApiDbContext>(options =>
             {
-                options.UseSqlite(_connection);
+                options.UseNpgsql(_testConnectionString);
             });
         });
 
@@ -59,20 +58,20 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     {
         using var scope = Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        await context.Database.EnsureCreatedAsync();
+        
+        await context.Database.EnsureCreatedAsync(); 
     }
 
-    public override async ValueTask DisposeAsync()
+    public new async Task DisposeAsync()
     {
-        await _connection.CloseAsync();
+        using var scope = Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+
+        await context.Database.EnsureDeletedAsync(); 
+        
         await base.DisposeAsync();
     }
     
-    async Task IAsyncLifetime.DisposeAsync()
-    {
-        await DisposeAsync();
-    }
-
     public async Task ResetDatabaseAsync()
     {
         using var scope = Services.CreateScope();
@@ -80,5 +79,4 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
     }
-
 }
