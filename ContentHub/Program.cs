@@ -44,8 +44,8 @@ builder.Services.AddAuthentication(options =>
   };
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=contenthub.db";
-builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlite(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApiDbContext>(options => options.UseNpgsql(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
