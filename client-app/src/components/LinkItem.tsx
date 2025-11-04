@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { LinkDto } from '../services/apiService';
+import { removeTagFromLink, type LinkDto, type TagDto} from '../services/apiService';
 import AddTagForm from './AddTagForm';
 import { FaTrash, FaCheck, FaPencilAlt } from 'react-icons/fa';
 import EditLinkForm from './EditLinkForm';
@@ -17,6 +17,7 @@ interface LinkItemProps {
 function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted, onToggleRead, onLinkUpdated }: LinkItemProps) {
   const [isAddingTag, setIsAddingTag] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [deletingTagId, setDeletingTagId] = useState<number | null>(null);
 
   const handleTagAdded = (updatedLink: LinkDto) => {
     onTagAdded(updatedLink);
@@ -28,6 +29,31 @@ function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted, onToggleRead, o
       onLinkDeleted(link.id);
     }
   };
+
+  const handleRemoveTag = async (e: React.MouseEvent, tag: TagDto) => {
+    e.stopPropagation();
+    if (!window.confirm(`Remover a tag "${tag.name}" deste link?`)) {
+      return;
+    }
+
+    setDeletingTagId(tag.id);
+    try {
+      await removeTagFromLink(link.id, tag.id);
+      const updatedLink: LinkDto = {
+        ...link,
+        tags: link.tags.filter(t => t.id !== tag.id),
+      };
+
+      onLinkUpdated(updatedLink);
+
+    } catch (err) {
+      console.error("Falha ao remover tag", err);
+      alert("Erro ao remover a tag. Tente novamente.");
+    } finally {
+      setDeletingTagId(null);
+    }
+  };
+
 
   return (
     <li className={`link-item ${link.isRead ? 'is-read' : ''}`}>
@@ -55,8 +81,18 @@ function LinkItem({ link, onTagAdded, onTagClick, onLinkDeleted, onToggleRead, o
             key={tag.id}
             className="tag-item clickable"
             onClick={() => onTagClick(tag.name)}
+            title={`Filtrar por "${tag.name}"`}
           >
             {tag.name}
+            
+            <button
+              className="delete-tag-btn"
+              onClick={(e) => handleRemoveTag(e, tag)}
+              disabled={deletingTagId === tag.id}
+              title={`Remover tag "${tag.name}"`}
+            >
+              {deletingTagId === tag.id ? '...' : <>&times;</>}
+            </button>
           </span>
         ))}
       </div>
