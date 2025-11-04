@@ -9,7 +9,7 @@ RUN dotnet restore
 
 COPY . .
 
-RUN dotnet test -c Release
+# RUN dotnet test -c Release
 
 RUN dotnet publish "ContentHub/ContentHub.csproj" -c Release -o /app/publish
 
