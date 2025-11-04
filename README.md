@@ -1,90 +1,107 @@
-# Hub de Conteúdo Pessoal (ContentHub API)
+# ContentHub - Aplicação Full-Stack de "Read-it-Later"
 
-![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet) ![C#](https://img.shields.io/badge/C%23-12-green) ![License](https://img.shields.io/badge/License-MIT-blue)
+[![React](https://img.shields.io/badge/React-TypeScript-blue?logo=react)](https://react.dev/)
+[![.NET](https://img.shields.io/badge/.NET-9-blueviolet?logo=dotnet)](https://dotnet.microsoft.com/)
+[![Azure](https://img.shields.io/badge/Deploy-Azure-blue?logo=microsoftazure)](https://portal.azure.com)
+[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/MatheusMW21/content-hub-api/deploy.yml?branch=main&label=CI%2FCD)](https://github.com/MatheusMW21/content-hub-api/actions)
 
-API RESTful desenvolvida em .NET 9 para criar um serviço pessoal de "Read-it-Later", permitindo salvar e gerenciar links de artigos, vídeos e outros conteúdos da web para consumo posterior.
-
-## Sobre o Projeto
-
-Este projeto nasceu da necessidade pessoal de organizar a grande quantidade de links interessantes que encontro diariamente. Em vez de deixá-los perdidos em abas do navegador ou em blocos de notas, criei esta API para centralizar, categorizar e gerenciar todo esse conteúdo de forma simples e eficiente.
-
-O foco é ter um backend robusto e escalável que sirva como base para futuras aplicações cliente (web, mobile, etc.).
-
-## Funcionalidades
-
-- **Salvar Links:** Endpoint para adicionar novos links com URL, título e descrição.
-- **Listar Conteúdo:** Endpoint para visualizar todos os links salvos, ordenados por data de adição.
-- **Marcar como Lido:** Funcionalidade para marcar um link como consumido.
-- **Deletar Links:** Endpoint para remover links da lista.
-- **Documentação Interativa:** Interface do Swagger para visualizar e testar todos os endpoints facilmente.
-
-## Tecnologias Utilizadas
-
-- **[.NET 9](https://dotnet.microsoft.com/pt-br/download/dotnet/9.0):** Framework principal para a construção da API.
-- **[ASP.NET Core](https://dotnet.microsoft.com/pt-br/apps/aspnet):** Para a criação de endpoints RESTful.
-- **[Entity Framework Core 8](https://learn.microsoft.com/pt-br/ef/core/):** ORM para a comunicação com o banco de dados.
-- **[SQLite](https://www.sqlite.org/index.html):** Banco de dados local utilizado para persistência dos dados.
-- **[Swagger (Swashbuckle)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore):** Para documentação e testes da API.
-
-## Como Executar Localmente
-
-Siga os passos abaixo para ter uma cópia do projeto rodando na sua máquina.
-
-### Pré-requisitos
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/9.0)
-- [Git](https://git-scm.com/downloads)
-- Um editor de código de sua preferência (VS Code, Visual Studio, Rider)
-
-### Passos para Instalação
-
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/MatheusMW21/content-hub-api.git](https://github.com/MatheusMW21/content-hub-api.git)
-    ```
-
-2.  **Navegue até a pasta do projeto:**
-    ```bash
-    cd content-hub-api
-    ```
-
-3.  **Instale as dependências do .NET:**
-    ```bash
-    dotnet restore
-    ```
-
-4.  **Aplique as migrações do Entity Framework para criar o banco de dados:**
-    ```bash
-    dotnet ef database update
-    ```
-
-5.  **Execute a aplicação:**
-    ```bash
-    dotnet run
-    ```
-
-6.  **Acesse a documentação Swagger** no seu navegador para testar os endpoints:
-    `https://localhost:PORTA/swagger` (a porta será indicada no seu terminal, ex: 7001).
-
-## Testes
-
-O projeto possui uma suíte de testes automatizados para garantir a qualidade e a estabilidade do código.
-
-- **Testes de Unidade:** Utilizando xUnit e Moq para testar os serviços de forma isolada.
-- **Testes de Integração:** Utilizando `WebApplicationFactory` e uma base de dados SQLite em memória para testar o fluxo completo dos endpoints da API, incluindo a camada de autenticação e o acesso a dados.
+O ContentHub é uma aplicação web full-stack completa, construída do zero, que funciona como um serviço pessoal de "read-it-later". Este projeto demonstra um ciclo de vida de desenvolvimento de software moderno, desde a concepção de uma API segura, passando por testes automatizados, até ao deploy contínuo (CI/CD) de uma arquitetura híbrida na nuvem.
 
 ---
 
-## API no ar
+## Links da Aplicação
 
-A API está implantada no Microsoft Azure e pode ser testada através da documentação do Swagger no link abaixo:
-
-**[https://wirtzcontenthubapi.azurewebsites.net/swagger](https://wirtzcontenthubapi.azurewebsites.net/swagger)**
+* **Frontend (React) na Vercel:** [https://content-hub-api-tau.vercel.app/](https://content-hub-api-tau.vercel.app/)
+* **Backend (API .NET) no Azure:** [https://wirtzcontenthubapi.azurewebsites.net/swagger](https://wirtzcontenthubapi.azurewebsites.net/swagger)
 
 ---
 
+## Funcionalidades Principais
 
-## Autor
+* **Autenticação e Autorização:** Sistema de registo e login de múltiplos utilizadores com tokens **JWT**.
+* **Organização Avançada:**
+    * **Tags:** Adicione múltiplas tags a cada link.
+    * **Filtros:** Filtre a sua lista de links instantaneamente ao clicar numa tag.
+    * **Estado "Lido":** Mova links para uma secção de "Lidos" para manter a sua lista principal organizada.
+* **Extração Automática de Títulos:** A API usa *web scraping* para buscar automaticamente o título de um link quando ele é adicionado.
+* **Interface de Utilizador Moderna:**
+    * **Design Responsivo:** Totalmente funcional em telemóveis e desktops.
+    * **Tema Claro/Escuro:** Seletor de tema com persistência no `localStorage`.
+    * **UX Polida:** Componentes interativos como Modais, formulários e validação no lado do cliente.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Matheus-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/matheuspinheiro08/)
-[![GitHub](https://img.shields.io/badge/GitHub-MatheusMW21-181717?style=for-the-badge&logo=github)](https://github.com/MatheusMW21)
+### Arquitetura e Tecnologias
+
+Este projeto utiliza uma arquitetura de serviços híbrida, com o frontend servido por uma CDN global (Vercel) e o backend a correr como um serviço de contêiner (Azure).
+
+**Frontend (client-app):**
+* **React 18** com **TypeScript** e **Vite**
+* **Roteamento:** React Router DOM
+* **Estilização:** CSS Padrão com Variáveis (para temas)
+* **Ícones:** React Icons
+
+**Backend (ContentHub):**
+* **.NET 9** (Minimal APIs e Controllers)
+* **Base de Dados:** Entity Framework Core 9 com SQLite (persistido no Azure)
+* **Segurança:** Autenticação JWT Bearer, BCrypt.Net (hashing de senhas), User Secrets, CORS.
+* **Serviços:** `HtmlAgilityPack` para Web Scraping.
+
+**Testes (ContentHub.Tests):**
+* **Testes de Unidade:** xUnit e Moq (para simular dependências)
+* **Testes de Integração:** `WebApplicationFactory` com uma base de dados SQLite em memória para testar o fluxo completo da API.
+
+**DevOps & Cloud:**
+* **CI/CD (Automação):** **GitHub Actions**
+* **Containerização:** **Docker**
+* **Deploy do Backend:** **Azure Container Registry** e **Azure App Service**.
+* **Deploy do Frontend:** **Vercel**.
+
+---
+
+## Como Executar Localmente (Full-Stack)
+
+Para executar o projeto completo na sua máquina, são necessários dois terminais.
+
+**Pré-requisitos:**
+* SDK do .NET 9
+* Node.js 18+
+
+### 1. Backend (.NET API)
+
+No primeiro terminal, inicie a API (que corre por defeito em `https://localhost:7014`).
+
+```bash
+# 1. Navegue para a raiz do projeto
+cd /caminho-para/read-it-later-proj
+
+# 2. Configure os segredos da API
+# (É necessário apenas na primeira vez)
+dotnet user-secrets init --project ContentHub
+dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_SECRETA_LONGA_E_ALEATORIA_AQUI"
+dotnet user-secrets set "Jwt:Issuer" "https://localhost:7014"
+dotnet user-secrets set "Jwt:Audience" "https://localhost:7014"
+dotnet user-secrets set "DefaultUser:Username" "wirtz"
+dotnet user-secrets set "DefaultUser:Password" "SuaSenha@123"
+
+# 3. Restaure, compile e execute a API
+dotnet run --project ContentHub --launch-profile https
+```
+### 2. Frontend (React App)
+
+No segundo terminal, inicie o cliente React.
+```
+# 1. Navegue para a pasta do cliente
+cd /caminho-para/read-it-later-proj/client-app
+
+# 2. Crie o seu ficheiro de ambiente local
+# Crie um ficheiro chamado ".env.development"
+# e adicione a seguinte linha:
+VITE_API_BASE_URL=https://localhost:7014/api
+
+# 3. Instale as dependências (necessário apenas na primeira vez)
+npm install
+
+# 4. Inicie o servidor de desenvolvimento
+npm run dev
+```
+Abra http://localhost:5173 no seu navegador e a aplicação estará a funcionar!
