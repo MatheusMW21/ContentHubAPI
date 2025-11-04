@@ -10,7 +10,7 @@ O ContentHub é uma aplicação web full-stack completa, construída do zero, qu
 
 ---
 
-## Links da Aplicação ao Vivo
+## Links da Aplicação
 
 * **Frontend (React) na Vercel:** [https://content-hub-api-tau.vercel.app/](https://content-hub-api-tau.vercel.app/)
 * **Backend (API .NET) no Azure:** [https://wirtzcontenthubapi.azurewebsites.net/swagger](https://wirtzcontenthubapi.azurewebsites.net/swagger)
