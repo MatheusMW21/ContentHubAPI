@@ -100,12 +100,63 @@ button.logout {
 }
 
 .tag-item {
-  background-color: var(--background-color);
-  color: var(--text-color-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.8em;
+  display: flex; 
+  align-items: center; 
+  gap: 0.25rem; 
+  
+  background-color: var(--tag-bg); 
+  color: var(--tag-text);
   border: 1px solid var(--border-color);
+
+  padding: 0.25rem 0.4rem 0.25rem 0.75rem; 
+  border-radius: 999px; 
+  font-size: 0.8em;
+  font-weight: 500;
+  white-space: nowrap; 
+}
+
+.tag-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tag-item.clickable:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.delete-tag-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  
+  color: var(--tag-text); 
+
+  font-size: 1.1em; 
+  line-height: 1;
+  font-weight: bold;
+  margin-left: 0.25rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.delete-tag-btn:hover {
+  opacity: 1; 
+}
+
+.tag-item.clickable:hover .delete-tag-btn {
+  color: #ffffff;
+}
+
+.delete-tag-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .app-header {
@@ -571,3 +622,4 @@ input:-moz-autofill {
     padding: 1.5rem;
   }
 }
+

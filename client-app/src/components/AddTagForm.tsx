@@ -35,11 +35,10 @@ return (
         onChange={(e) => setTagName(e.target.value)}
         placeholder="Nova tag..."
         disabled={isSubmitting}
-        autoFocus // Foca o input automaticamente quando ele aparece
+        autoFocus 
       />
       <div className="form-actions">
         <button type="submit" disabled={isSubmitting}>Adicionar</button>
-        {/* 2. Adicione o botão de cancelar */}
         <button type="button" onClick={onCancel} className="btn-secondary">Cancelar</button>
       </div>
     </form>

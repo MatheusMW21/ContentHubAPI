@@ -151,6 +151,44 @@ public class LinksController : ControllerBase
     return Ok(MapToLinkDto(link));
   }
 
+  [HttpDelete("{linkId}/tags/{tagId}")]
+  public async Task<IActionResult> RemoveTagFromLink(int linkId, int tagId)
+  {
+    var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    if (string.IsNullOrEmpty(userIdString))
+    {
+      return Unauthorized();
+    }
+
+    var currentUserId = int.Parse(userIdString);
+    var link = await _context.Links
+                                 .Include(l => l.Tags)
+                                 .FirstOrDefaultAsync(l => l.Id == linkId);
+
+    if (link == null)
+    {
+      return NotFound(new { Message = "Link não encontrado." });
+    }
+
+    if (link.UserId != currentUserId)
+    {
+      return Forbid();
+    }
+
+    var tagToRemove = link.Tags.FirstOrDefault(t => t.Id == tagId);
+
+    if (tagToRemove != null)
+    {
+      link.Tags.Remove(tagToRemove);
+      await _context.SaveChangesAsync();
+
+      return NoContent();
+    }
+
+    return NotFound(new { Message = "Tag não encontrada neste Link." });
+
+  }
+
   private LinkDto MapToLinkDto(SavedLink link)
   {
     return new LinkDto(

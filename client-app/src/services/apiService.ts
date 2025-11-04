@@ -204,6 +204,29 @@ export const updateLink = async (linkId: number, updateData: UpdateLinkData): Pr
   return await response.json() as LinkDto;
 };
 
+export const removeTagFromLink = async (linkId: number, tagId: number) : Promise<void> => {
+  const token = localStorage.getItem('jwt_token');
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Nenhum token de autenticação encontrado.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/Links/${linkId}/tags/${tagId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Falha ao remover tag');
+  }
+  return;
+}
+
 export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
   const response = await fetch(`${API_BASE_URL}/Auth/login`, {
     method: 'POST',
