@@ -92,10 +92,6 @@ button.logout {
   text-decoration: underline;
 }
 
-/* COLE ISTO NO LUGAR DAS DUAS DEFINIÇÕES ANTIGAS 
-  DE .tag-item E .delete-tag-btn
-*/
-
 .tags-container {
   margin-top: 1rem;
   display: flex;
