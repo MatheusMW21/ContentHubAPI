@@ -74,16 +74,7 @@ No primeiro terminal, inicie a API (que corre por defeito em `https://localhost:
 # 1. Navegue para a raiz do projeto
 cd /caminho-para/read-it-later-proj
 
-# 2. Configure os segredos da API
-# (É necessário apenas na primeira vez)
-dotnet user-secrets init --project ContentHub
-dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_SECRETA_LONGA_E_ALEATORIA_AQUI"
-dotnet user-secrets set "Jwt:Issuer" "https://localhost:7014"
-dotnet user-secrets set "Jwt:Audience" "https://localhost:7014"
-dotnet user-secrets set "DefaultUser:Username" "wirtz"
-dotnet user-secrets set "DefaultUser:Password" "SuaSenha@123"
-
-# 3. Restaure, compile e execute a API
+# 2. Restaure, compile e execute a API
 dotnet run --project ContentHub --launch-profile https
 ```
 ### 2. Frontend (React App)
